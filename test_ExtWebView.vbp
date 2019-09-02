@@ -1,6 +1,6 @@
 Type=Exe
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\Windows\SysWOW64\stdole2.tlb#OLE Automation
-Reference=*\G{5A46A89C-99B6-4EE9-83AB-997EDC12F726}#1.0#0#..\..\Utils\cef\ExtWebView.exe#ExtWebViewLib
+Reference=*\G{5A46A89C-99B6-4EE9-83AB-997EDC12F726}#1.0#0#..\..\IwaraSpy_V30sp2_jit_Ultimate_Final\Utils\cef\ExtWebView.exe#ExtWebViewLib
 Form=test_ExtWebView.frm
 Module=WebCtrlModule; WebCtrlModule.bas
 Class=WebCtrlClass; WebCtrlClass.cls

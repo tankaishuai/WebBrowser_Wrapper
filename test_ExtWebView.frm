@@ -1,13 +1,13 @@
 VERSION 5.00
 Begin VB.Form Form1 
    Caption         =   "Form1"
-   ClientHeight    =   6792
+   ClientHeight    =   6795
    ClientLeft      =   120
-   ClientTop       =   468
-   ClientWidth     =   11232
+   ClientTop       =   465
+   ClientWidth     =   11235
    LinkTopic       =   "Form1"
-   ScaleHeight     =   6792
-   ScaleWidth      =   11232
+   ScaleHeight     =   6795
+   ScaleWidth      =   11235
    StartUpPosition =   3  '窗口缺省
 End
 Attribute VB_Name = "Form1"
@@ -41,19 +41,31 @@ Private Sub Form_Load()
     cmd = "--parent_wnd=" + Hex(Me.hWnd) + " --tab_rect=0,0,800,600 --url=www.baidu.com"
     webCtrl.InitWebKit cmd, webEngine
     
-    webCtrl.SetListener "OnWebCtrlEvent", Me      'CreateDispatchInvokerA("OnWebCtrlEvent", Me)
+    webCtrl.SetListener "OnWebCtrlEvent", Me
 End Sub
 
 Public Function OnWebCtrlEvent(ByVal strEvent As String, ByVal strParam1 As String, ByVal strParam2 As String) As Long
     OnWebCtrlEvent = 0
     MsgBox strEvent
     
-    If "OnDocumentReady" = strEvent And (0 = m_iCount) Then
+    If "OnDocumentReady" = strEvent Then
+        If (0 = m_iCount) Then
+            ' 再跳转
+            webCtrl.LoadUrl "H:\program_Myself\doc\test_dynwrapx_eng.html"
+            MsgBox "hwnd = " + Hex(webCtrl.GetHWnd)
+            
+        ElseIf 1 = m_iCount Then
+            ' 执行一个函数, 返回 execute_id
+            ret = webCtrl.ExecJScript("getUserAgent()")
+            MsgBox "exec = " + ret
+        End If
+        
         m_iCount = m_iCount + 1
         
-        ' 再跳转到 www.qq.com
-        webCtrl.LoadUrl "www.qq.com"
-        MsgBox "hwnd = " + Hex(webCtrl.GetHWnd)
+    ElseIf "OnExecuteCallback" = strEvent Then
+        ' 获取执行函数的结果
+        ' strParam1 = execute_id
+        MsgBox "ret = " + strParam1 + " , " + strParam2
     End If
 End Function
 
