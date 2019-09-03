@@ -38,18 +38,24 @@ Const webEngine As Long = 2
 Private Sub Form_Load()
     m_iCount = 0
     
+    ' 设置回调响应函数
     webCtrl.SetListener "OnWebCtrlEvent", Me
     
+    ' 初始化
     cmd = "--parent_wnd=" + Hex(Me.hWnd) + " --tab_rect=0,0,800,600 --url=www.baidu.com"
     webCtrl.InitWebKit cmd, webEngine
     
+    ' 注册扩展
     webCtrl.RegisterObject "msg_box", Me
 End Sub
 
 Public Function OnWebCtrlEvent(ByVal strEvent As String, ByVal strParam1 As String, ByVal strParam2 As String) As Variant
     'MsgBox strEvent
+    If "OnUrlChanged" = strEvent Then
+        ' 注册扩展
+        webCtrl.RegisterObject "msg_box", Me
     
-    If "OnDocumentReady" = strEvent Then
+    ElseIf "OnDocumentReady" = strEvent Then
         If (0 = m_iCount) Then
             ' 再跳转
             webCtrl.LoadUrl App.Path + "\test_ExtWebView.html"
