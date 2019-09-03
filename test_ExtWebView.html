@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.js"></script>
+  <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+    }
+    .tabs{
+      display: flex;
+    }
+    .tabs .item{
+      width: 100px;
+      height: 30px;
+      background: #222;
+      color: #fff;
+      text-align: center;
+      margin: 0 5px;
+    }
+	.item div{
+	font-size:22px;
+	}
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="tabs">
+      <div class="item" v-for="item in tabs" :key="item">
+         <div @click="remove(item)">{{item}}</div>
+      </div>
+    </div>
+    <br>
+    <div class="tabs">
+      添加:      
+      <div class="item" v-for="item in removes" :key="item">
+         <div @click="add(item)">{{item}}</div>
+      </div>
+    </div>
+  </div>
+<script type="text/javascript">
+	//---获取用户代理
+	external.RegisterFunction( function(){return navigator.userAgent;}, "getUserAgent" );
+	
+	//---调用API
+	external.Execute("msg_box", function(i,c,r){ alert(r); }, "open in webpage 1");
+	
+	if("msg_box" in external)
+		external.msg_box("open in webpage 2");
+	
+</script>
+</body>
+</html>

@@ -38,26 +38,27 @@ Const webEngine As Long = 2
 Private Sub Form_Load()
     m_iCount = 0
     
+    webCtrl.SetListener "OnWebCtrlEvent", Me
+    
     cmd = "--parent_wnd=" + Hex(Me.hWnd) + " --tab_rect=0,0,800,600 --url=www.baidu.com"
     webCtrl.InitWebKit cmd, webEngine
     
-    webCtrl.SetListener "OnWebCtrlEvent", Me
+    webCtrl.RegisterObject "msg_box", Me
 End Sub
 
-Public Function OnWebCtrlEvent(ByVal strEvent As String, ByVal strParam1 As String, ByVal strParam2 As String) As Long
-    OnWebCtrlEvent = 0
-    MsgBox strEvent
+Public Function OnWebCtrlEvent(ByVal strEvent As String, ByVal strParam1 As String, ByVal strParam2 As String) As Variant
+    'MsgBox strEvent
     
     If "OnDocumentReady" = strEvent Then
         If (0 = m_iCount) Then
             ' 再跳转
-            webCtrl.LoadUrl "H:\program_Myself\doc\test_dynwrapx_eng.html"
+            webCtrl.LoadUrl App.Path + "\test_ExtWebView.html"
             MsgBox "hwnd = " + Hex(webCtrl.GetHWnd)
             
         ElseIf 1 = m_iCount Then
             ' 执行一个函数, 返回 execute_id
             ret = webCtrl.ExecJScript("getUserAgent()")
-            MsgBox "exec = " + ret
+            MsgBox "execute_id = " + ret
         End If
         
         m_iCount = m_iCount + 1
@@ -66,6 +67,14 @@ Public Function OnWebCtrlEvent(ByVal strEvent As String, ByVal strParam1 As Stri
         ' 获取执行函数的结果
         ' strParam1 = execute_id
         MsgBox "ret = " + strParam1 + " , " + strParam2
+        
+    ElseIf "OnExecute" = strEvent Then
+        ' 调用函数
+        If "msg_box" = strParam1 Then
+            MsgBox "call: " + strParam1 + "(" + strParam2 + ")"
+            OnWebCtrlEvent = "return from vb6"
+            Exit Function
+        End If
     End If
 End Function
 
